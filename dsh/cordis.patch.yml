@@ -26,3 +26,19 @@
         recordUserTurns: true
         # 是否记录子代理（subagent）会话，默认关闭以免污染
         recordSubagents: false
+        # 语音朗读（可选，默认关闭）
+        # 它依赖本机装好 GPT-SoVITS 引擎且在 9880 端口跑着；换一台机器就没有，
+        # 所以插件本身要能干净地跑，语音是加装的皮肤。用户可在记忆网页上开关，
+        # 也可以用 memory_file_voice({action:"enable"}) 在对话里开。
+        voice:
+          enabled: false
+          engineUrl: 'http://127.0.0.1:9880'
+          # 下面两条留空则用 elysia_say.py 的默认值；换机器后按实际路径填
+          # pythonPath: 'C:\path\to\python.exe'
+          # scriptPath: 'C:\path\to\elysia_say.py'
+          model: 'v5turbo'
+          ref: 'R06'
+          speed: 1.0
+          minChars: 4
+          maxChars: 1200
+          cooldownMs: 800
