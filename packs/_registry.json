@@ -1,0 +1,11 @@
+{
+  "version": 1,
+  "generatedAt": "2026-11-05",
+  "note": "记忆包索引。这里只列 id 与 manifest 路径，真正的元信息以各包 manifest.json 为准；新增包 = 新建目录 + 加一行。",
+  "packs": [
+    {
+      "id": "elysia",
+      "manifest": "elysia/manifest.json"
+    }
+  ]
+}

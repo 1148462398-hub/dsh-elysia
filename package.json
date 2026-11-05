@@ -1,17 +1,23 @@
 {
   "name": "dsh-shared-memory",
-  "version": "1.9.4",
-  "description": "全局共享记忆：所有会话共用一份可读可改的 MEMORY.md，双硬盘分区镜像 + 历史快照 + 跨进程写锁。人设可对话调整；要求/指正/教训/方法/请求/会话/方法库/文档九个分区；按命中频率与重复强调在主文件与可检索归档间流动；关键词共现 + BM25 排序，质疑度驱动换方法与翻归档；上下文压缩后自动重读。另有自有技能库（SKILL.md 操作手册，可选 run.mjs 执行并带路径/超时/参数护栏）和表情包（用户自己导入图片，插件按文件名与标签自动分类情绪，并**根据对话内容在合适时机自动发送**合适的表情包来表达情绪）。",
+  "version": "1.10.0",
+  "description": "【DSH-elysia】全局共享记忆：所有会话共用一份可读可改的 MEMORY.md，双硬盘分区镜像 + 历史快照 + 跨进程写锁。人设可对话调整；要求/指正/教训/方法/请求/会话/方法库/文档九个分区；按命中频率与重复强调在主文件与可检索归档间流动；关键词共现 + BM25 排序，质疑度驱动换方法与翻归档；上下文压缩后自动重读。另有自有技能库（SKILL.md 操作手册，可选 run.mjs 执行并带路径/超时/参数护栏）和表情包（用户自己导入图片，插件按文件名与标签自动分类情绪，并**根据对话内容在合适时机自动发送**合适的表情包来表达情绪）。还有**记忆包（Memory Packs）**：插件自带整份角色记忆与人设（packs/elysia），安装时由用户选择是否启用，装前自动备份、可卸载恢复，只写 identity/persona 两个分区。",
   "type": "module",
   "main": "lib/index.js",
   "exports": {
     ".": "./lib/index.js",
     "./client": "./lib/client.js",
+    "./packs": "./lib/packs.js",
     "./package.json": "./package.json"
   },
+  "bin": {
+    "dsh-memory-pack": "scripts/install-pack.mjs"
+  },
   "files": [
-    "lib",
+    "lib/*.js",
     "dsh",
+    "packs",
+    "scripts/install-pack.mjs",
     "README.md",
     "AGENTS.md",
     "LICENSE"
@@ -32,7 +38,9 @@
     "tiering",
     "skills",
     "stickers",
-    "emoticons"
+    "emoticons",
+    "memory-pack",
+    "persona-pack"
   ],
   "author": "1148462398-hub",
   "license": "MIT",

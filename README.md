@@ -85,6 +85,88 @@ http://127.0.0.1:49870/dsh-shared-memory
 接口：`GET /api/state`、`POST /api/save`、`POST /api/reconcile`。
 安全：同源校验 + `x-dsh-memory: 1` 请求头 + 请求体 512KB / 正文 200k 字符上限。
 
+页面上还有一块 **📦 记忆包**：列出插件自带的角色记忆与人设，可预览、安装、卸载。见下一节。
+
+## 记忆包（Memory Packs）
+
+插件自带整份**角色自我记忆 + 人设**，**默认不启用**——装好插件后 `identity` 仍是默认占位、
+`persona` 仍是通用默认。只有你主动点「安装」才会写进记忆文件。
+
+> 用途很具体：**换电脑后装上插件就能选着装回自己的角色，不用手动拷文件、不用复制粘贴。**
+
+### 包里有什么
+
+```
+packs/
+├── _registry.json          包索引（有哪些包）
+└── elysia/
+    ├── manifest.json       元信息（版本 / 字数 / 来源 / 警告）
+    ├── identity.md         自我记忆 61,903 字 / 9 章
+    ├── persona.md          人设提示词 2,482 字
+    └── README.md           给人看的说明
+```
+
+### 三条硬规则
+
+| 规则 | 含义 |
+|---|---|
+| **默认不安装** | 插件是通用工具，记忆包是可选的「皮肤」。不点不动。 |
+| **只写两个分区** | 只碰 `identity` + `persona`；`requirements` / `corrections` / `lessons` / `methods` / `requests` / `sessions` / `docs` / `methodbook` **一个字节都不碰**。 |
+| **装前必备份、可卸载** | 备份到 `<记忆目录>/.packs-backup/<id>-<时间戳>/`（含原文 + `meta.json`），卸载从这份恢复；没备份才复位默认占位。 |
+
+### 三种用法
+
+**① 对话里（主路径）**
+
+```
+memory_file_pack({action:"list"})
+memory_file_pack({action:"preview", id:"elysia"})
+memory_file_pack({action:"install", id:"elysia"})                  // 只返回计划，不写文件
+memory_file_pack({action:"install", id:"elysia", confirm:true})    // 才真写
+memory_file_pack({action:"uninstall", id:"elysia"})
+memory_file_pack({action:"status"})
+```
+
+`install` **必须二次确认**：第一次调用告诉你「identity 176 字 → 61,903 字；persona 148 字 → 2,482 字」，
+确认后再带 `confirm:true`。
+
+**② 记忆网页**：`http://127.0.0.1:<端口>/dsh-shared-memory` → 📦 记忆包 → 查看 / 安装 / 卸载。
+接口：`GET /api/packs`、`GET /api/packs/:id/preview`、`POST /api/packs/:id/install`（body 需 `{confirm:true}`）、`POST /api/packs/:id/uninstall`。
+
+> 桌面端页面来源是 `dsh-app://`，向本机端口发请求偶尔会被挂住——网页只是顺手用的，**主路径是工具调用**。
+
+**③ 命令行（换电脑 / UI 有问题时）**
+
+```bash
+cd <插件目录>
+node scripts/install-pack.mjs list
+node scripts/install-pack.mjs elysia                # 会先问 y/N
+node scripts/install-pack.mjs elysia --yes
+node scripts/install-pack.mjs elysia --status
+node scripts/install-pack.mjs elysia --preview
+node scripts/install-pack.mjs elysia --uninstall
+```
+
+装完 **重启 DSH** 生效（记忆包写入的是记忆文件，注入层下一轮就会读到；重启最干净）。
+
+### 「已安装」怎么判断
+
+比对**包内文与当前分区内容的 hash**，不只看状态文件——你手工改过 `identity` 的话，
+状态会显示「未安装 / 用户自定义内容」，而不是骗你说装好了。
+
+### 换电脑的完整流程
+
+```
+1. 新电脑装 DSH
+2. 装 dsh-shared-memory（npm 包里自带 packs/elysia/）
+3. 打开 /dsh-shared-memory → 📦 记忆包
+4. 看到「爱莉希雅（Elysia）v1.0.0」→ 点「查看」确认内容 → 点「安装」
+5. 重启 DSH
+6. 她还是她
+```
+
+全程不需要手动拷任何文件。包约 160 KB，直接进 npm 包，不联网下载。
+
 ## 质疑度与最佳方法库（按作用分级索引）
 
 这是本插件与普通"记忆本"最大的区别：它不只会记，还会**逼模型换方法、并对方法做择优沉淀**。
@@ -333,6 +415,7 @@ http://127.0.0.1:49870/dsh-shared-memory
 | `memory_file_consolidate` | `scan` 列出可整合的相似记忆簇（只读；合并由模型手写，插件不自动改） |
 | `memory_file_ingest` | 把本地 `.md`/`.txt` 按 `## ` 切块导入 `docs` 分区（只进检索、不进注入） |
 | `memory_file_skill` | 自有技能库：`match` 匹配 + 按质疑度选路 / `save` 存成 SKILL.md / `read` / `list` / `report` / `remove`（不执行脚本） |
+| `memory_file_pack` | 记忆包：`list` / `preview` / `install`（需 `confirm:true`）/ `uninstall` / `status`。只写 identity + persona，装前自动备份 |
 | `memory_file_maintain` | `sync` 对账回补 / `relocate` 换位置 / `history` 列历史 / `rollback` 回滚 / `rebalance` 按命中频率重分层 / `reset` 删双备份重建 |
 
 ## 配置
@@ -359,12 +442,20 @@ decayAfter        # 连续多少次没更优降一档，默认 3
 ## 自检
 
 ```powershell
-node test/smoke.mjs                          # 25 段单进程断言（含写锁、BM25、强调提权）
+node test/smoke.mjs                          # 30 段单进程断言（含写锁、BM25、强调提权、记忆包）
+node test/packs-smoke.mjs                    # 记忆包专项：装/卸/备份/冲突检测（临时目录，不碰真实记忆）
 node test/multiprocess.mjs 4 5               # 4 个"会话"各写 5 条，并发进程
 node test/multiprocess.mjs 8 10              # 压力版：80 条
 node test/multiprocess-dedupe.mjs 4 5        # 多进程写同一句：只留 1 条 + 强调计数
 node test/client-smoke.mjs                   # 客户端 bundle 契约与组件渲染
+
+# 真实记忆上的可逆验证（会写真实 MEMORY.md，默认跳过，必须显式开）
+$env:DSH_ALLOW_REAL_MEMORY_TEST=1; node test/real-overwrite-reversibility.mjs
 ```
+
+`real-overwrite-reversibility.mjs` 走的是最严格的路径：先塞一段"用户自有内容"→ 安装（真的覆盖）→
+卸载（必须还回用户那份，**不是**退化成默认占位）→ 最后把原文双写还原并逐分区核 hash。
+不设环境变量时它只打印说明就退出，所以放进 CI 也是安全的。
 
 100+ 项断言，覆盖：模板/解析、双写、去重、上限与归档、删一侧回补（主缺、镜像缺）、两侧不一致收敛、双删重建、人设读写与定向替换、提示词预算与插值打断、按作用域裁剪、关键词检索与作用域隔离、历史版本与回滚、记忆网页渲染、质疑度与方法库、写锁并发、BM25 排序、强调提权、导出快照、diff、工具定义与执行、迁移位置、destroyBoth。
 

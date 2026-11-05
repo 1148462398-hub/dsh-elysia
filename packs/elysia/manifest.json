@@ -1,0 +1,33 @@
+{
+  "id": "elysia",
+  "name": "爱莉希雅（Elysia）",
+  "version": "1.0.0",
+  "description": "《崩坏3》前文明纪元的天生律者。1,696 条官方确证语音 + 112,175 条剧情台词提炼的自我记忆与人设。",
+  "author": "1148462398-hub",
+  "license": "MIT",
+  "homepage": "https://github.com/1148462398-hub/dsh-shared-memory",
+  "size": {
+    "identity": 61903,
+    "persona": 2482
+  },
+  "sections": {
+    "identity": "identity.md",
+    "persona": "persona.md"
+  },
+  "source": {
+    "audio": "85 个游戏语音包 → 111,114 条 → 筛选 1,696 条 / 2.96 小时",
+    "text": "bh3text.com 全站 112,175 条去重台词",
+    "note": "内容级双向校验，剔除 1,782 条被证伪的他人台词"
+  },
+  "warnings": [
+    "导入 identity 会覆盖现有自我记忆分区",
+    "导入 persona 会覆盖现有人设分区",
+    "其它八个分区（requirements / corrections / lessons / methods / requests / sessions / docs / methodbook）不受影响"
+  ],
+  "install": {
+    "sections": ["identity", "persona"],
+    "backup": true,
+    "removable": true,
+    "defaultEnabled": false
+  }
+}
