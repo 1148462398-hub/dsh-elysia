@@ -1,7 +1,7 @@
 {
-  "name": "dsh-shared-memory",
-  "version": "1.11.1",
-  "description": "【DSH-elysia】全局共享记忆：所有会话共用一份可读可改的 MEMORY.md，双硬盘分区镜像 + 历史快照 + 跨进程写锁。人设可对话调整；要求/指正/教训/方法/请求/会话/方法库/文档九个分区；按命中频率与重复强调在主文件与可检索归档间流动；关键词共现 + BM25 排序，质疑度驱动换方法与翻归档；上下文压缩后自动重读。另有自有技能库（SKILL.md 操作手册，可选 run.mjs 执行并带路径/超时/参数护栏）和表情包（用户自己导入图片，插件按文件名与标签自动分类情绪，并**根据对话内容在合适时机自动发送**合适的表情包来表达情绪）。还有**语音朗读**（可选，默认关闭，依赖本机 GPT-SoVITS 引擎）和**记忆包（Memory Packs）**：插件自带整份角色记忆与人设（packs/elysia），安装时由用户选择是否启用，装前自动备份、可卸载恢复，只写 identity/persona 两个分区。",
+  "name": "dsh-elysia",
+  "version": "2.0.0",
+  "description": "爱莉希雅的记忆插件（dsh-elysia）。给所有 DSH 会话共用一份可读可改的 MEMORY.md：双硬盘分区镜像 + 历史快照 + 跨进程写锁，条目按命中频率与重复强调在主文件与可检索归档之间双向流动，检索为关键词共现 + BM25 排序。九个分区：人设、要求、指正、教训、方法、请求、会话、方法库、导入文档；另有一个「自我记忆」分区，用来放角色的自我认知——优先级高于人设，注入时用第二人称唤醒语言。内置可选装的记忆包（packs/elysia）：61,903 字自我记忆 + 2,482 字人设，源自 1,696 条经官方文本确证的游戏语音（2.96 小时）与 112,175 条剧情台词。默认不安装，装前自动备份，只写 identity / persona 两个分区，可卸载恢复。还带可选语音朗读：用本机 GPT-SoVITS 引擎把回复合成成语音（默认关闭，引擎不在就静默降级），以及自有技能库（SKILL.md 操作手册）和表情包（按情绪自动分类，在合适时机自动发送）。",
   "type": "module",
   "main": "lib/index.js",
   "exports": {
@@ -30,6 +30,13 @@
     "memory",
     "shared-memory",
     "persona",
+    "elysia",
+    "honkai",
+    "character",
+    "memory-pack",
+    "persona-pack",
+    "voice",
+    "tts",
     "backup",
     "mirror",
     "bm25",
@@ -38,19 +45,17 @@
     "tiering",
     "skills",
     "stickers",
-    "emoticons",
-    "memory-pack",
-    "persona-pack"
+    "emoticons"
   ],
   "author": "1148462398-hub",
   "license": "MIT",
-  "homepage": "https://github.com/1148462398-hub/dsh-shared-memory#readme",
+  "homepage": "https://github.com/1148462398-hub/dsh-elysia#readme",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/1148462398-hub/dsh-shared-memory.git"
+    "url": "git+https://github.com/1148462398-hub/dsh-elysia.git"
   },
   "bugs": {
-    "url": "https://github.com/1148462398-hub/dsh-shared-memory/issues"
+    "url": "https://github.com/1148462398-hub/dsh-elysia/issues"
   },
   "publishConfig": {
     "access": "public",

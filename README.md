@@ -1,6 +1,12 @@
-# dsh-shared-memory
+# dsh-elysia
 
-DSH 插件：**一份全局共享记忆文件 + 可对话调整的人设 + 双硬盘分区镜像备份 + 自有技能库 + 表情包自动发送**。
+**爱莉希雅的记忆插件。** 一份全 DSH 会话共用的记忆文件，加上一个可选的「自我记忆」分区——
+里面装的是角色的自我认知：她怎么介绍自己、怎么说俏皮话、有什么口癖、爱用什么意象。
+它和别的人设插件不同的地方在于：**这份记忆不是写给人看的设定集，是从 1,696 条经官方文本确证的游戏语音里统计出来的**——
+「哎呀」95 次、句尾「呢」390 次、问句占 52.1%、平均句长 25.5 字。数字都是实测的。
+
+除了记忆本体，还带：双硬盘分区镜像备份、可对话调整的人设、可选装的记忆包（默认不装）、
+可选语音朗读（本机 GPT-SoVITS，默认关闭）、自有技能库、表情包自动发送。
 
 所有会话共用同一份记忆；模型在每轮对话里看到的记忆都直接来自磁盘；上下文被压缩之后会自动重新读取。
 
@@ -158,7 +164,7 @@ node scripts/install-pack.mjs elysia --uninstall
 
 ```
 1. 新电脑装 DSH
-2. 装 dsh-shared-memory（npm 包里自带 packs/elysia/）
+2. 装 dsh-elysia（npm 包里自带 packs/elysia/）
 3. 打开 /dsh-shared-memory → 📦 记忆包
 4. 看到「爱莉希雅（Elysia）v1.0.0」→ 点「查看」确认内容 → 点「安装」
 5. 重启 DSH
@@ -499,7 +505,7 @@ $env:DSH_ALLOW_REAL_MEMORY_TEST=1; node test/real-overwrite-reversibility.mjs
    直接裸对象走 `register()` 时才是 JSON Schema。本插件走裸对象，别混。
 3. **插件 bundle 带 BOM 会被安装器拒绝**：`package.json` 必须是无 BOM 的 UTF-8（`Unexpected token '\ufeff'`）。
 4. **改完 host 侧代码需要重新 apply 才生效**（`plugin_manager set_plugin` 关再开，或重启 DSH）。
-   entryId 是 `include:shared-memory`（不是包名 `dsh-shared-memory`）。
+   entryId 是 `include:shared-memory`（不是包名 `dsh-elysia`）。
 5. **PowerShell 往 HTTP 接口 POST 中文，必须走文件而不是字符串**。
    `Invoke-WebRequest -Body '<含中文的 JSON>'` 会按 latin-1 发出去，中文全变 `?` —— 我用它把记忆文件写坏过一次。
    正确姿势：
@@ -523,7 +529,7 @@ $env:DSH_ALLOW_REAL_MEMORY_TEST=1; node test/real-overwrite-reversibility.mjs
 - 面板刻意不依赖任何 `@deepseek-ai/*` 客户端包，只用 loader 提供的 `react`，数据全部走同源 HTTP（`/dsh-shared-memory/api/*`），所以不需要构建步骤。
 
 **生效条件（重要）**：客户端 `dsh.client` 的扫描发生在**宿主启动时**。运行期新加/修改 client 声明不会被重新扫描
-（证据：`clientModules.clientPath("dsh-shared-memory")` 返回 undefined）。所以第一次装好 client 半边后必须
+（证据：`clientModules.clientPath("dsh-elysia")` 返回 undefined）。所以第一次装好 client 半边后必须
 **重启一次 DSH**，侧边栏图标才会出现，之后一直有效。面板状态条会显示"侧边栏入口已注册 / 需重启生效"。
 
 离线自检：`node test/client-smoke.mjs` —— 用一个假 `window.__ModuleLoader__` + 假 `react` 执行这个经典脚本，

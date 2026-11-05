@@ -1,4 +1,4 @@
-# dsh-shared-memory —— 全局共享记忆文件插件
+# 爱莉希雅的记忆插件（dsh-elysia）
 #
 # 说明：本 patch 随 bundle 一起被 loader 加载。
 # - primaryPath：主记忆文件（默认在 DSH 主目录下，属于"插件存储空间"）
@@ -8,8 +8,8 @@
 # 镜像 = 第一块非系统盘（本机为 D:）。
 
 - insert:
-    - id: shared-memory
-      name: 'dsh-shared-memory'
+    - id: elysia-memory
+      name: 'dsh-elysia'
       config:
         # 主/镜像路径留空 = 用默认值（主盘 %DSH_HOME%\dsh-shared-memory\MEMORY.md，
         # 镜像 = 第一块非系统盘）。发布到市场时**不要在这里写死绝对路径**，
