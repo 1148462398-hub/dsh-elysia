@@ -39,6 +39,9 @@
           model: 'v5turbo'
           ref: 'R06'
           speed: 1.0
+          # 音量增益（dB）。0 = 不调；+6 约两倍响。只改波形幅度，不动系统音量。
+          # 系统默认设备被切到别的声卡 / 虚拟设备时，靠这个能救回来一点。
+          volume: 0
           minChars: 4
           maxChars: 1200
           cooldownMs: 800
