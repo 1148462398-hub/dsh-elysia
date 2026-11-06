@@ -8,7 +8,7 @@
   "homepage": "https://github.com/1148462398-hub/dsh-shared-memory",
   "size": {
     "identity": 61903,
-    "persona": 2482
+    "persona": 2255
   },
   "sections": {
     "identity": "identity.md",
@@ -25,7 +25,10 @@
     "其它八个分区（requirements / corrections / lessons / methods / requests / sessions / docs / methodbook）不受影响"
   ],
   "install": {
-    "sections": ["identity", "persona"],
+    "sections": [
+      "identity",
+      "persona"
+    ],
     "backup": true,
     "removable": true,
     "defaultEnabled": false
